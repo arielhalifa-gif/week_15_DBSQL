@@ -78,7 +78,17 @@ def get_customers_with_shipping_dates():
 
 def get_customer_quantity_per_order():
     """Return customer name and quantity for each order."""
-    pass
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    query = '''SELECT customers.customerName, orderdetails.quantityOrdered FROM customers
+                INNER JOIN orders ON customers.customerNumber = orders.customerNumber
+                INNER JOIN orderdetails ON orders.orderNumber = orderdetails.orderNumber
+                ORDER BY customers.customerName'''
+    cursor.execute(query)
+    result = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return result
 
 def get_customers_payments_by_lastname_pattern(pattern: str = "son"):
     """Return customers and payments for last names matching pattern."""
