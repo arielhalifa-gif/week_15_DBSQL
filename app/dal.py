@@ -16,7 +16,16 @@ def get_customers_by_credit_limit_range():
 
 def get_orders_with_null_comments():
     """Return orders that have null comments."""
-    pass
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    query = '''SELECT orderNumber, comments FROM orders
+                WHERE comments IS NULL
+                ORDER BY orderDate'''
+    cursor.execute(query)
+    result = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return result
 
 def get_first_5_customers():
     """Return the first 5 customers."""
