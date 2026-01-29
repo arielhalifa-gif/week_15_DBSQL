@@ -92,4 +92,16 @@ def get_customer_quantity_per_order():
 
 def get_customers_payments_by_lastname_pattern(pattern: str = "son"):
     """Return customers and payments for last names matching pattern."""
-    pass
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    query = '''SELECT customers.customerName, customers.contactFirstName, SUM(payments.amount) FROM customers
+                INNER JOIN payments ON customers.customerNumber = payments.customerNumber
+                WHERE customers.contactFirstName LIKE '%ly%'
+                    OR customers.contactFirstName LIKE '%Mu%'
+                GROUP BY customers.customerName
+                ORDER BY SUM(payments.amount) DESC'''
+    cursor.execute(query)
+    result = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return result
