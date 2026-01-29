@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sql-state
+spec:
+  selector:
+    matchLabels:
+      app: sql-db     # has to match .spec.template.metadata.labels
+  serviceName: sql-service
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: sql-db     # has to match .spec.selector.matchLabels
+    spec:
+      containers:
+      - name: sql-container
+        image: mysql:9.6.0
+        ports:
+        - containerPort: 3306
+          name: web
+        env:
+          - name: MYSQL_HOST
+            value: "mysql"
+          - name: MYSQL_USER
+            value: "root"
+          - name: MYSQL_PASSWORD
+            value: "rootpassword"
+          - name: MYSQL_DATABASE
+            value: "classicmodels" 
+        volumeMounts:
+        - name: www
+          mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+  - metadata:
+      name: www
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "gp3"
+      resources:
+        requests:
+          storage: 1Gi
