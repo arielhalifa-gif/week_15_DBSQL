@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import uvicorn
 from db_init import init_database
 from dal import get_customers_by_credit_limit_range
 from dal import get_orders_with_null_comments
@@ -66,3 +67,7 @@ def customers_payments_by_lastname_pattern(pattern: str = "son"):
     result = get_customers_payments_by_lastname_pattern()
     return {"message": "successfully",
             "result": result}
+
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=8000)
