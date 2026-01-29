@@ -42,7 +42,14 @@ def get_first_5_customers():
 
 def get_payments_total_and_average():
     """Return total and average payment amounts."""
-    pass
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    query = 'SELECT AVG(amount), SUM(amount), MIN(amount), MAX(amount) FROM payments'
+    cursor.execute(query)
+    result = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return result
 
 def get_employees_with_office_phone():
     """Return employees with their office phone numbers."""
