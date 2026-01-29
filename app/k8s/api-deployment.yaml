@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+  labels:
+    app: api-contacts
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api-contacts
+  template:
+    metadata:
+      labels:
+        app: api-contacts
+    spec:
+      containers:
+      - name: api-container
+        image: arielhalifa/api-contacts:v1
+        ports:
+        - containerPort: 8000
