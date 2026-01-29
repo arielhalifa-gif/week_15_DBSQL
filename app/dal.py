@@ -29,7 +29,16 @@ def get_orders_with_null_comments():
 
 def get_first_5_customers():
     """Return the first 5 customers."""
-    pass
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    query = '''SELECT customerName, contactLastName, contactFirstName FROM customers
+                ORDER BY contactLastName
+                LIMIT 5'''
+    cursor.execute(query)
+    result = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return result
 
 def get_payments_total_and_average():
     """Return total and average payment amounts."""
